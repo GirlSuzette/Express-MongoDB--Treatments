@@ -1,0 +1,28 @@
+{
+  "name": "express-mongodb--treatments",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon --verbose app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/MiriamGaGu/express-mongodb--treatments-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/MiriamGaGu/express-mongodb--treatments-/issues"
+  },
+  "homepage": "https://gitlab.com/MiriamGaGu/express-mongodb--treatments-#readme",
+  "dependencies": {
+    "chalk": "^2.4.2",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "mongoose": "^5.4.7",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.9"
+  }
+}
