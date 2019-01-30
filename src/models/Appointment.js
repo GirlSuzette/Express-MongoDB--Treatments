@@ -15,7 +15,7 @@ const appointmentSchema = new Schema({
         type: String,
         required: true
     },
-    treatmentId: { type: Schema.Types.ObjectId, ref: 'Treatment' },
+    treatment: { type: Schema.Types.ObjectId, ref: 'Treatment' },
     user: { type: Schema.Types.ObjectId, ref: 'User' }
 
 

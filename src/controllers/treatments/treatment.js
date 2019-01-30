@@ -40,7 +40,8 @@ const createAppointment = (body, day) => {
         name: body.name,
         phoneNumber: body.phoneNumber,
         day,
-        treatmentId: body._id
+        treatment: body._id,
+        user: body.user,
 
     })
 
@@ -56,7 +57,7 @@ const create = (req, res) => {
         _id: mongoose.Types.ObjectId(),
         description: req.body.description,
         listOfTreatments: req.body.listOfTreatments,
-        user: req.body.userId,
+        user: req.body.user,
         listOfAppointments: newIds.map((day) => createAppointment(req.body, day))
     })
     newTreatment
