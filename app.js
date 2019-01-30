@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 const api = require('./src/routes/api');
 
 //setup mongoose and mongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/treatment-api', { useNewurlParser: true, useCreateIndex: true })
+mongoose.connect('mongodb://127.0.0.1:27017/treatment-api', { useNewUrlParser: true, useCreateIndex: true })
 //linea 19 instruccion para que alce la direccion de mongosse
 mongoose.connection.on('connected', () => {
     console.log('I got treatment!!')

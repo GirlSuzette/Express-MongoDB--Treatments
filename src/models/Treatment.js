@@ -7,12 +7,12 @@ const treatmentSchema = new Schema({
         type: String,
         required: true
     },
-    list_of_treatments: [{
+    listOfTreatments: [{
         type: String,
         required: true
     }],
     user: { type: Schema.Types.ObjectId, ref: 'User' },
-    list_of_appointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }]
+    listOfAppointments: [{ type: Schema.Types.ObjectId, ref: 'Appointment' }]
 
 
 })
