@@ -4,13 +4,17 @@ const app = Router();
 const Users = require('../controllers/users/user');
 const Treatments = require('../controllers/treatments/treatment');
 const Appointments = require('../controllers/appointments/appointment');
+const isAuthenticated = require('../../services/Auth')
 
 //Users routes
-app.get('/users', Users.index);
-app.get('/users/:userId', Users.findBy);
+app.get('/users', isAuthenticated, Users.index);
+app.get('/users/:userId', isAuthenticated, Users.findBy);
 app.get('/users/:userId/treatments', Users.findtreatmentsBy);
 app.post('/users', Users.create);
 app.put('/users/:userId', Users.updateBy);
+//Authentication
+app.post('/auth/signup', Users.signup)
+app.post('/auth/login', Users.login)
 
 //Treatment routes
 app.get('/treatments', Treatments.index);

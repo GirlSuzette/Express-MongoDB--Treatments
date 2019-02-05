@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt')
 const Treatment = require('../../models/Treatment')
 const Appointment = require('../../models/Appointment')
 
@@ -49,6 +50,16 @@ const createAppointment = (body, day) => {
 
     return newAppointment._id
 }
+
+const update = (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const phoneNumber = req.body.phoneNumber
+
+    User
+
+}
+
 const create = (req, res) => {
     console.log(req)
     const newIds = req.body.listOfTreatments.split(',')
