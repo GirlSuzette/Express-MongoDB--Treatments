@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
 const Treatment = require('../../models/Treatment')
 const Appointment = require('../../models/Appointment')
 
@@ -31,7 +30,7 @@ const findBy = (req, res) => {
                 .status(200)
         })
         .catch(err => {
-            console - log(`caugth err: ${err}`);
+            console.log(`caugth err: ${err}`);
             return res.status(500).json(err)
         })
 }
@@ -51,14 +50,7 @@ const createAppointment = (body, day) => {
     return newAppointment._id
 }
 
-const update = (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const phoneNumber = req.body.phoneNumber
 
-    User
-
-}
 
 const create = (req, res) => {
     console.log(req)
@@ -85,8 +77,31 @@ const create = (req, res) => {
             return res.status(500).json({ message: 'Post Failed' })
         })
 }
+
+const deleteTreatmentBy = (req, res) => {
+    Treatment
+        .findById(req.params.treatmentId, function (err, treatment) {
+            if (!err) {
+                Appointment.deleteMany({ user: { $in: [treatment._id] } }, function (err) { })
+                treatment
+                    .remove()
+                    .then(() => {
+                        res
+                            .status(200)
+                            .json({
+                                message: 'Treatment was deleted'
+                            });
+                    });
+            }
+        })
+        .catch(err => {
+            console.log(`caught error: ${err}`);
+            return res.status(401).json({ message: 'You dont have permission' })
+        })
+}
 module.exports = {
     index,
     findBy,
-    create
+    create,
+    deleteTreatmentBy
 }

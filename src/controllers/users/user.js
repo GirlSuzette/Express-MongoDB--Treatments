@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
 const User = require('../../models/User');
 const Treatment = require('../../models/Treatment')
+const Appointment = require('../../models/Appointment')
 const jwt = require('jsonwebtoken')
 
 const index = (req, res) => {
@@ -53,7 +54,7 @@ const signup = (req, res) => {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
                         res.status(500)
-                            .json({ message: error })
+                            .json({ message: err })
                     }
 
                     const newUser = new User({
@@ -61,7 +62,8 @@ const signup = (req, res) => {
                         name: req.body.name,
                         email: req.body.email,
                         password: hash,
-                        phoneNumber: req.body.phoneNumber
+                        phoneNumber: req.body.phoneNumber,
+
                     })
                     newUser
                         .save()
@@ -128,6 +130,7 @@ const findBy = (req, res) => {
         .findById(req.params.userId)
         .exec()
         .then(data => {
+
             res.json({
                 type: 'Found User by Id',
                 data: data
@@ -141,23 +144,62 @@ const findBy = (req, res) => {
 }
 
 const updateBy = (req, res) => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
+    const phoneNumber = req.body.phoneNumber;
+
     User
-        .updateOne({ _id: req.params.userId }, {
-            name: req.body.name,
-            email: req.body.email
+        .findOne({ _id: req.params.userId })
+        .then(function (user) {
+            // console.log(user)
+            bcrypt.compare(password, user.password, (err, result) => {
+                if (result) {
+                    user.name = name;
+                    user.email = email;
+                    user.phoneNumber = phoneNumber;
+
+                    user.save()
+                        .then(saved => {
+                            res
+                                .status(201)
+                                .json({
+                                    message: "user update successfully",
+                                    user: saved
+                                })
+                        })
+                } else {
+                    bcrypt.hash(password, 10, (err, hash) => {
+                        if (err) {
+                            return res.status(500)
+                                .json({
+                                    message: error
+                                })
+                        }
+                        user.name = name;
+                        user.email = email;
+                        user.phoneNumber = phoneNumber;
+                        user.password = hash;
+                        console.log(user)
+                        user.save()
+                            .then(saved => {
+                                res.status(201)
+                                    .json({
+                                        message: "user update succeefully",
+                                        user: saved
+                                    });
+                            })
+                    });
+                }
+            });
+        }).catch(err => {
+            console.log(`caugt the error: ${err}`);
+            return res.status(404).json({ "type": "Not Found" })
         })
-        .then(data => {
-            res.json({
-                type: 'Update User',
-                data: data
-            })
-                .status(200)
-        })
-        .catch(err => {
-            console.log(`caugth err: ${err}`);
-            return res.status(500).json(err)
-        })
+
 }
+
+
 
 const findtreatmentsBy = (req, res) => {
     Treatment
@@ -177,6 +219,28 @@ const findtreatmentsBy = (req, res) => {
         })
 }
 
+const deleteBy = (req, res) => {
+    User
+        .findById(req.params.userId, function (err, user) {
+            if (!err) {
+                Appointment.deleteMany({ user: { $in: [user._id] } }, function (err) { })
+                Treatment.deleteMany({ user: { $in: [user._id] } }, function (err) { })
+                user
+                    .remove()
+                    .then(() => {
+                        res.status(200)
+                            .json({
+                                message: 'User was deleted'
+                            })
+                    })
+            }
+
+        }).catch(err => {
+            console.log(`caugth err: ${err}`);
+            return res.status(500).json({ message: 'You do not have permission' })
+        })
+
+}
 
 module.exports = {
     index,
@@ -185,5 +249,6 @@ module.exports = {
     updateBy,
     findtreatmentsBy,
     signup,
-    login
+    login,
+    deleteBy
 }

@@ -18,7 +18,9 @@ const userSchema = new Schema({
     phoneNumber: {
         type: String,
         required: true
-    }
+    },
+    roles: Boolean
+    
 })
 
 module.exports = mongoose.model('User', userSchema)
